@@ -75,3 +75,8 @@ class FormationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Formation
         fields = '__all__'
+
+class StatusTravailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StatusTravail
+        fields = '__all__'

@@ -13,6 +13,7 @@ router.register(r'presences', views.PresenceViewSet, basename='presence')
 router.register(r'photos_chantier', views.PhotoChantierViewSet, basename='photo-chantier')
 router.register(r'documents_chantier', views.DocumentsChantierViewSet, basename='documents-chantier')
 router.register(r'formations', views.FormationViewSet, basename='formation')
+router.register(r'status_travail', views.StatusTravailViewSet, basename='status-travail')
 
 urlpatterns = [
     # Endpoints pour les employés
@@ -20,4 +21,5 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('export/excel/', views.get_excel, name='excel'),
+    path('import/zones/', views.import_zones, name='import_zones'),
 ]

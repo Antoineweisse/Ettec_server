@@ -30,6 +30,7 @@ class Employee(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100, null=True, blank=True)
     lastname = models.CharField(max_length=100, null=True, blank=True)
     contrat = models.CharField(max_length=100, null=True, blank=True)
+    telephone = models.CharField(max_length=100, null=True, blank=True)
 
     objects = EmployeeManager()
 
@@ -82,6 +83,7 @@ class PhotoChantier(models.Model):
     photo = models.ImageField(upload_to='photos/')
     date = models.DateTimeField()
     expediteur = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    has_been_downloaded = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Photo for {self.chantier.name} by {self.expediteur.login} on {self.date}"
@@ -124,3 +126,10 @@ class Formation(models.Model):
             except Exception as e:
                 print(f"Error deleting formation file: {e}")
         super().delete(*args, **kwargs)
+
+class StatusTravail(models.Model):
+    name = models.CharField(max_length=100)
+    raccourcis = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name

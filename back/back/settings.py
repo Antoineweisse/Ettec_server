@@ -30,17 +30,18 @@ SECRET_KEY = 'django-insecure-3^7e=bv3*9t&tx6*4hdv0!^0ogg%4o&fq!o1*)^-=qj*xed&3c
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'fuzzy-dolls-walk.loca.lt',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    '79.137.32.183',
+    'ettec.arobaseprime.fr'
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081",  # front employee
+    "http://localhost:8081",
     "http://127.0.0.1:8081",
-    "http://localhost:3000", # front admin
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://employeeapp--s8onpaxovs.expo.app"
+    "https://employeeapp.expo.app"
 ]
 
 

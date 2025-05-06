@@ -8,6 +8,8 @@ ORANGE = "ffa500"
 BLEU_CLAIR = "77b5fe"
 GREEN = "008020"
 BLEU = "0080ff"
+YELLOW = "ffff00"
+RED ="ff0000"
 
 def makeDate(ws):
     fill = PatternFill(start_color=VIOLET, end_color=VIOLET, fill_type="solid")
@@ -38,8 +40,18 @@ def makeDate(ws):
     ws[f"{col_letter}1"].font = Font(bold=True)
     ws[f"{col_letter}1"].fill = fill
 
+    fill = PatternFill(start_color=YELLOW, end_color=YELLOW, fill_type="solid")
+    col_letter = get_column_letter(34)
+    ws[f"{col_letter}1"] = "Accomptes - Primes - Divers"
+    ws.column_dimensions[col_letter].width = 20
+    ws.column_dimensions[col_letter].height = 100
+    ws.merge_cells(f"{col_letter}1:{col_letter}2")
+    ws[f"{col_letter}1"].alignment = Alignment(horizontal="left", vertical="bottom", wrap_text=True)
+    ws[f"{col_letter}1"].font = Font(bold=False)
+    ws[f"{col_letter}1"].fill = fill
+
 def makeTitle(ws,title):
-    ws.merge_cells("A3:AG4")
+    ws.merge_cells("A3:AH4")
     ws["A3"] = title
     ws["A3"].alignment = Alignment(horizontal="center", vertical="center")
     ws["A3"].font = Font(bold=True, size=14)
@@ -51,8 +63,8 @@ def makeEmployeeName(ws,Name, contrat,debut):
     cell1 = f"A{debut}"
     cell2 = f"A{debut+1}"
 
-    ws.merge_cells(f"{cell1}:AG{debut}")
-    ws.merge_cells(f"{cell2}:AG{debut+1}")
+    ws.merge_cells(f"{cell1}:AH{debut}")
+    ws.merge_cells(f"{cell2}:AH{debut+1}")
 
     ws[cell1] = Name
     ws[cell1].alignment = Alignment(horizontal="center", vertical="center")
@@ -106,7 +118,7 @@ def makeEmployeeHoraires(ws,presences,debut):
             cell.value = 7
 
 
-    zone_mapping = {"Z1": debut+2, "Z2": debut+3, "Z3": debut+4, "Z4": debut+5, "Z5": debut+6}
+    zone_mapping = {"Z1": debut+2, "Z2": debut+3, "Z3": debut+4, "Z4": debut+5, "Z5": debut+6,"z1": debut+2, "z2": debut+3, "z3": debut+4, "z4": debut+5, "z5": debut+6}
     for presence in presences:
         day_num = presence['date'].day
         col_letter = get_column_letter(day_num + 1)
@@ -124,8 +136,25 @@ def makeEmployeeHoraires(ws,presences,debut):
         sum_cell.font = Font(bold=True,color="000000")
         sum_cell.fill = fill
     
-    sum_cell = ws[f"AG{debut+1}"]
-    sum_cell.value = f"=ROUND(SUM(B{debut+1}:AF{debut+1}) / 2, 2)"
+    
+    fill = PatternFill(start_color=YELLOW, end_color=YELLOW, fill_type="solid")
+    ws.merge_cells(f"AH{debut}:AH{debut+2}")
+    ws.merge_cells(f"AH{debut+3}:AH{debut+5}")
+    ws.merge_cells(f"AH{debut+6}:AH{debut+8}")
+
+
+    ws[f"AH{debut}"].alignment = Alignment(horizontal="left", vertical="top", wrap_text=True)
+    ws[f"AH{debut}"].font = Font(bold=False,color="000000",size=10)
+    ws[f"AH{debut}"].fill = fill
+
+    ws[f"AH{debut+3}"].alignment = Alignment(horizontal="left", vertical="top", wrap_text=True)
+    ws[f"AH{debut+3}"].font = Font(bold=False,color=RED,size=10)
+    ws[f"AH{debut+3}"].fill = fill
+
+    ws[f"AH{debut+6}"].alignment = Alignment(horizontal="left", vertical="top", wrap_text=True)
+    ws[f"AH{debut+6}"].font = Font(bold=False,color="000000",size=10)
+    ws[f"AH{debut+6}"].fill = fill
+
    
 
     return debut + 9
@@ -151,6 +180,3 @@ def MakeExcel(infos):
 
 if __name__ == "__main__":
     MakeExcel([])
-    
-
-

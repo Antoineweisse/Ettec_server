@@ -21,7 +21,7 @@ from rest_framework.decorators import action
 from .excel import MakeExcel
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
-from collections import defaultdict
+from .importZones import ReadOdf
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
@@ -110,8 +110,13 @@ class PresenceViewSet(viewsets.ModelViewSet):
     serializer_class = PresenceSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-    
 
+class StatusTravailViewSet(viewsets.ModelViewSet):
+    queryset = StatusTravail.objects.all()
+    serializer_class = StatusTravailSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
 class DocumentsChantierViewSet(viewsets.ModelViewSet):
     queryset = DocumentsChantier.objects.all()
     serializer_class = DocumentsChantierSerializer
@@ -241,3 +246,27 @@ def get_excel(request):
     response['Content-Disposition'] = f'attachment; filename="presences_{month}_{year}.xlsx"'
     response["Access-Control-Expose-Headers"] = "Content-Disposition"
     return response
+
+@api_view(['POST'])
+def import_zones(request):
+    file = request.FILES.get('file')
+    if not file:
+        return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        memory_file = BytesIO(file.read())
+        rep = ReadOdf(memory_file)
+        tab = []
+        for row in rep:
+            print(row)
+            zone = Zone(
+                villes=row['ville'],
+                dept=row['departement'],
+                zone=row['zone'],
+                km=row['kms']
+            )
+            zone.save()
+            tab.append(zone)
+        serializer = ZoneSerializer(tab, many=True)
+        return Response({"message": "Zones imported successfully", "zones": serializer.data}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
